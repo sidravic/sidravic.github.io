@@ -12,7 +12,7 @@ github_username: sidravic
 
 # Email and twitter are optional:
 email:
-twitter_username: @sidravic
+twitter_username: "@sidravic"
 
 # Set this to true to get LaTeX math equation support
 use_math: true
