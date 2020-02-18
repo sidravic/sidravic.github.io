@@ -1,4 +1,4 @@
-# First post
+# Home
 
 
-I intend to document my journey into ML and the areas that have tripped me along the way. This blog is largely to serve as documentation of my mistakes. 
+Nothing here. 
