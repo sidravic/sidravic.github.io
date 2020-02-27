@@ -1,5 +1,6 @@
 # Cheatsheet
-> This post is some of the details I use as a quick reference when things slip my mind. It's a snapshot of frequently used operations, jargon and methods that trip while working with data, Pytorch or Fastai.
+> This post is some of the details I use as a quick reference when things slip my mind. It's a snapshot of frequently used operations, jargon and methods that trip me while working with data, Pytorch or Fastai.
+> A lot of writing here contains typos and the intent was to have a quick reference to the concept.
 
 
 ### Valuable Links 
@@ -379,6 +380,10 @@ fit(1, 1e-3)
 
 Every layer is trained with this learning rate
 
+<br>
+<br>
+
+
 ### Discrimative learning rates
 
 When we pass a slice with a single value the final layers get the value of `1e-3` but the all the layers before get `1e-3` divided by 3
@@ -394,6 +399,10 @@ fit(1, slice(1e-5, 1e-3))
 ```
 
 When 2 values are passed the first layers get (1e-5) and the subsequent layers get the layers get a gradually changing learning rate in the order of (1e-3)/2
+
+<br>
+<br>
+
 
 ### Kaiming Initialisation 
 
@@ -432,6 +441,9 @@ torch.rand(784, 50)/math.sqrt(784)
             [0.0234, 0.0118, 0.0051,  ..., 0.0259, 0.0341, 0.0027],
             [0.0008, 0.0269, 0.0101,  ..., 0.0331, 0.0341, 0.0064],
             [0.0322, 0.0173, 0.0029,  ..., 0.0299, 0.0224, 0.0220]])
+
+<br>
+<br>
 
 
 ### Broadcasting 
@@ -516,7 +528,7 @@ def matmul(a,b):
     return c
 ```
 
-Breakding down line number 13 which does the actual multiplication. He row `0` of matrix `a` is 
+Breaking down line number 13 which does the actual multiplication. He row `0` of matrix `a` is 
 
 ```python
 a[0], a[0].shape
