@@ -434,3 +434,146 @@ torch.rand(784, 50)/math.sqrt(784)
             [0.0322, 0.0173, 0.0029,  ..., 0.0299, 0.0224, 0.0220]])
 
 
+### Broadcasting 
+
+> How the underlying matmul within pyTorch works.
+
+The thing about using broadcasting for multiplications is that it transposes each column of `a` and multiples it with the entire matrix `b` as columnar multiplication and sums it up to get the same result
+
+So in the following example, consider matrices `a` and `b`
+
+```python
+a = tensor([[1., 2.], [3., 5.], [4., 6.]])
+b = tensor([[1., 3., 5., 7.], [2., 4., 6. ,8.]])
+```
+
+```python
+a.shape, b.shape
+```
+
+
+
+
+    (torch.Size([3, 2]), torch.Size([2, 4]))
+
+
+
+```python
+a[0, None].shape
+```
+
+
+
+
+    torch.Size([1, 2])
+
+
+
+The expected output for standard matrix multiplication is this
+
+```python
+a.matmul(b)
+```
+
+
+
+
+    tensor([[ 5., 11., 17., 23.],
+            [13., 29., 45., 61.],
+            [16., 36., 56., 76.]])
+
+
+
+ Our matrices is are shaped as
+
+```python
+ar, ac = a.shape
+br, bc = b.shape
+
+a.shape, b.shape
+```
+
+
+
+
+    (torch.Size([3, 2]), torch.Size([2, 4]))
+
+
+
+The `matmul` method within pyTorch uses broadcasting to achieve higher computational speeds by passing the logic to the AL10 layers where it's implemented in. 
+
+The method looks like this 
+
+```python
+def matmul(a,b):
+    ar,ac = a.shape
+    br,bc = b.shape
+    assert ac==br
+    c = torch.zeros(ar, bc)
+    for i in range(ar):
+#       c[i,j] = (a[i,:]          * b[:,j]).sum() # previous
+        c[i]   = (a[i  ].unsqueeze(-1) * b).sum(dim=0)
+    return c
+```
+
+Breakding down line number 13 which does the actual multiplication. He row `0` of matrix `a` is 
+
+```python
+a[0], a[0].shape
+```
+
+
+
+
+    (tensor([1., 2.]), torch.Size([2]))
+
+
+
+It does a `a[0].unsqueeze(-1)` to introduce a dimension and converts the row into a column. 
+What this means is the matrix is now shaped differently
+
+```python
+a[0].unsqueeze(-1), a[0].unsqueeze(-1).shape
+```
+
+
+
+
+    (tensor([[1.],
+             [2.]]),
+     torch.Size([2, 1]))
+
+
+
+So now our matrix which was of shape `(2,)` is now of shape `(2, 1)`.
+
+Now the expected output of `row[0]` in matrix `c` is `[ 5., 11., 17., 23.]`
+This is what `a[i].unsqueeze(-1) * b` does 
+
+
+```python
+a[0].unsqueeze(-1) * b
+```
+
+
+
+
+    tensor([[ 1.,  3.,  5.,  7.],
+            [ 4.,  8., 12., 16.]])
+
+
+
+We now sum the two rows in the column dimension to get a single row of outputs
+
+```python
+(a[0].unsqueeze(-1) * b).sum(dim=0)
+```
+
+
+
+
+    tensor([ 5., 11., 17., 23.])
+
+
+
+The loop essentially does this for each row of matrix a to generate rows of matrix c
