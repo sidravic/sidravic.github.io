@@ -2,7 +2,7 @@
 
 ## Variance 
 
-1. https://www.youtube.com/watch?v=JIIXQaMXBVM 
+1. [Youtube Video](https://www.youtube.com/watch?v=JIIXQaMXBVM)
 2. Determines how far is each data point from the mean. 
 3. If most points were closer to the mean it means the variances is lower  
 
@@ -20,7 +20,7 @@ $$
  
 
 1. Is the positive square root of the variance 
-2. $σ =\frac{\sum(x −x_{mean})}{√2n −1}$
+2. $σ =\sqrt\frac{\sum(x −x_{mean})^2}{n}$
  
 <br>
 <br>
@@ -30,7 +30,7 @@ $$
 
  
 
-1. https://www.youtube.com/watch?v=xGbpuFNR1ME 
+1. [Youtube video](https://www.youtube.com/watch?v=xGbpuFNR1ME)
 2. Used to analyze linear relationships between 2 variables. How do these behave as pairs?  
 3. A positive value indicates a direct increasing linear relationship. If one goes up the other goes up 
 4. A negative value indicates an inverse relationship. If one goes up the other goes down. 
