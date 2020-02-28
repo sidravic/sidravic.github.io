@@ -70,7 +70,7 @@ $$
 <br>
 <br>
 
-## Pearson correlation coefficient = r 
+## Pearson correlation coefficient $r$ 
 
 And 
 
@@ -78,6 +78,7 @@ $$
 r = \frac{Covariance(x, y)}{standard deviation(x) ∗ standard deviation(y)}
 $$ 
 
+<br>
  
 $$
 r = Pearson coefficient =\frac{\sum(x −x_{mean}) (y −y_{mean})}{(n−1)∗Sx ∗Sy }
@@ -90,7 +91,9 @@ Where $Sx$ and $Sy$ are
 $$ 
     Sx=\frac{\sum(x −xmean)}{2√n −1}
 $$
- 
+
+<br> 
+
 $$
     Sy=\frac{\sum(y −ymean)}{2√(n −1)}
 $$ 
