@@ -67,6 +67,8 @@ $$
 3. Covariance is not standardized just direction 
 4. Suprious correlation: Two completely unrelated factors that seem to have mathematical correlation but have no sensible correlation in real life. Dog bars vs moon's phase 
 
+<br>
+<br>
 
 ## Pearson correlation coefficient = r 
 
@@ -80,10 +82,10 @@ $$
 $$
 r = Pearson coefficient =\frac{\sum(x −x_{mean}) (y −y_{mean})}{(n−1)∗Sx ∗Sy }
 $$ 
-[Equation] 
+
  
 
-Where Sx and Sy are 
+Where $Sx$ and $Sy$ are 
 
 $$ 
     Sx=\frac{\sum(x −xmean)}{2√n −1}
@@ -94,9 +96,8 @@ $$
 $$ 
  
 
-
-r is the coefficient of correlation 
-When n=number of elements in consideration 
+$r$ is the coefficient of correlation 
+When $n$=number of elements in consideration 
  
 
  
