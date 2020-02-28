@@ -261,6 +261,7 @@ The loss function is what the back propagation relies on where it goes back to a
 
 Use regularisation rather than reducing than parameters. We periodically drop off activations randomly based on a parameter. `emb_drop` and `p`. `emb_drop` drops off certain embeddings while `p` drops activations.
 
+
 ```python
 last_learner = tabular_learner(data, layers=[1000,500], ps=[0.001,0.01], emb_drop=0.04, 
                         y_range=y_range, metrics=accuracy)
@@ -332,6 +333,8 @@ It reduces something called Internal Covariant Shift. Math has proved that it do
 2. Find the variance of all the activations
 3. We normalize the value that is `(values - mean / standard deviation)`
 4. Scale and shift where we add a bias term and another variable like a bias term which is multipled instead of adding. Hence `scaled`
+5. It's a used in continuous parameters. It's a form of regularization. 
+6.  
 
 <br>
 <br>
