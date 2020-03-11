@@ -18,8 +18,7 @@ In categorical cross entropy our convolutions result in an output for each categ
 Our loss function, Categorical Cross Entropy (in the case of Multiclass classification), is made up of the following steps with the predictions. The following sections describe what actually happens at each of these steps. 
 
 1. Softmax
-2. Negative log" likelihood
-
+2. Negative log" loss
 <br>
 
 ![system schema](/images/categorical_cross_entropy_files/softmax.png)
@@ -63,7 +62,7 @@ To compute the loss we need the log of softmax.
 ```
 <br>
 
-Now given our model and a log softmax function are as follows
+Now given our model and a log softmax function are as follows. Ignore the placeholder `MSELoss` used in the code.
 
 ```python
 class Model(nn.Module):
@@ -128,7 +127,7 @@ sm_preds[0,1,2]
 <br>
 <br>
 
-### Negative Log Likelihood
+### Negative Log Loss
 
 Is the negative log of the probability of a prediction x. 
 
@@ -193,14 +192,14 @@ y_train[0]
 #tensor(5)
 ```
 
-With `Negative log likelihood` we're computing  
+With `Negative log loss` we're computing  
 
 1. for each record in `sm_preds` obtain the probability of the relevant `y_train` category. This simply returns a tensor of size 50000 containing the probabilities of each of the expected category for all the elements in `sm_preds` which is our softmax predictions list
 
 ```python
 sm_preds[range(y_train.shape[0]), y_train]
 ```
-2. We compute the mean and return the negative of the value as the `negative log likelihood`. Therefore
+2. We compute the mean and return the negative of the value as the `negative log loss`. Therefore
 
 ```python
 def nll(sm_preds, target):
@@ -246,7 +245,7 @@ F.log_softmax(preds, -1).shape
 
 <br>
 
-### Negative log likelihood
+### Negative log loss
 
 ```python
 F.nll_loss(F.log_softmax(preds, -1), y_train)
