@@ -36,7 +36,6 @@ Before we jump into `Softmax` it makes sense to have a grasp of how we arrived a
 
 ### Softmax
 
-<br>
 
 if our predictions are 
 
