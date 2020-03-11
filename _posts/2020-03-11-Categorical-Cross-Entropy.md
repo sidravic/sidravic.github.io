@@ -84,12 +84,12 @@ class Model(nn.Module):
         #_loss = self.loss(x.squeeze(), targ) 
         return x
     
-    def log_softmax(preds):
-        return (preds.exp()/(preds.exp().sum(-1, keepdim=True))).log()
+def log_softmax(preds):
+    return (preds.exp()/(preds.exp().sum(-1, keepdim=True))).log()
     
     # negative log loss
-    def nll(sm_preds, target):
-        return -sm_preds[range(target.shape[0]), target].mean()
+def nll(sm_preds, target):
+    return -sm_preds[range(target.shape[0]), target].mean()
 ```
 
 <br>
