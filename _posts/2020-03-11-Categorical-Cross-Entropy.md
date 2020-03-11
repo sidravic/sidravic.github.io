@@ -19,7 +19,12 @@ Our loss function, Categorical Cross Entropy (in the case of Multiclass classifi
 
 1. Softmax
 2. Negative log" likelihood
+
+<br>
+
 ![system schema](/images/categorical_cross_entropy_files/softmax.png)
+<br>
+
 ![system schema](/images/categorical_cross_entropy_files/softmax2.png)
 
 <br>
