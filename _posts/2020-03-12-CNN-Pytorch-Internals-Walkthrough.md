@@ -207,7 +207,7 @@ def fit(epochs, learn):
                 total_accuracy += accuracy(learn.model(xb), yb)
             nv = len(learn.data.valid_dl)
             print(epoch, total_loss/nv, total_accuracy/nv)
-        return (total_loss/nv, total_accuracy/nv)
+    return (total_loss/nv, total_accuracy/nv)
 ```
 
 ```python
@@ -215,5 +215,9 @@ loss, acc = fit(3, learner)
 ```
 
     Epoch #0
-    0 tensor(0.1770) tensor(0.9554)
+    0 tensor(0.1875) tensor(0.9610)
+    Epoch #1
+    1 tensor(0.2076) tensor(0.9576)
+    Epoch #2
+    2 tensor(0.1788) tensor(0.9616)
 
