@@ -183,7 +183,7 @@ sm_preds[0:3]
 
 ```
 
-This is essentially the probabilities of our input with respect to one of the 10 possible output categories. 1 to 10 in this case since it's MNIST
+This is essentially the probabilities of our input with respect to one of the 10 possible output categories. 1 to 10 in this case since it's MNIST (0 to 9 as indexes or categories)
 
 The training set category for input row 0 is category 5.
 
@@ -252,7 +252,7 @@ F.nll_loss(F.log_softmax(preds, -1), y_train)
 #tensor(2.3115, grad_fn=<NllLossBackward>)
 ```
 
-### Pytorch provides a convience method
+### Pytorch provides a convenience method
 
 ```python
 F.cross_entropy(preds, y_train)
