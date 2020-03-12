@@ -2,6 +2,9 @@
 > A quick run down on the internals of the a simple CNN right from the fetching of the data to the training loop. This is a quick reference on ensuring every component is tied correctly and how the abstractions work.
 Knowing the sequence correctly can be incredibly useful in knowing what each component contributes to the grand scheme of things.
 
+The model is still built with Linear layers instead of a convolution layer
+
+
 
 
 ```python
