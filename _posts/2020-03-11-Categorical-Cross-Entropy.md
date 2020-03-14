@@ -49,7 +49,7 @@ pred_tensor.exp()/(pred_tensor.exp().sum())
 ```
 <br>
 
-Assuming $x_i$ represents a prediction
+Assuming $x_i$ represents a activation from a layer. 
 
 $$\hbox{softmax(x)}_{i} = \frac{e^{x_{i}}}{e^{x_{0}} + e^{x_{1}} + \cdots + e^{x_{n-1}}}$$
 
