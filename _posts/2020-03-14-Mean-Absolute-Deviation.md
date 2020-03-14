@@ -1,5 +1,5 @@
 # Mean Absolute Deviation
-> Minor tibdit on what mean absolute deviation is. 
+> Minor tidbit on what mean absolute deviation is. 
 
 
 <br>
