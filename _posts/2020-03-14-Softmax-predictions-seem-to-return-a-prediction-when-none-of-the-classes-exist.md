@@ -20,7 +20,7 @@ $$
 
 It's always going to add up to 1. 
 
-The presence of a category can be determined by using a binomial approach instead.
+The presence of a category can be determined by using a binary approach instead.
 
 $$ b=\frac{e^x}{1+e^x}$$
 
@@ -28,12 +28,14 @@ to determine if the category is actually present and is more representative of t
 
 ![system schema](/images/softmax_images/softmax_binomial.png)
 
+The heading in the image that reads binomial actually means binary derived from "multi label binary classification" and is the approach used in multi label classification. [This](https://forums.fast.ai/t/lesson-10-discussion-wiki-2019/42781/299) discussion is a useful thread on how to change the loss function to use `BCE` instead of `categorical_cross_entropy`
+
 Understanding the image:
 
 1. Image1, indicates via softmax that the category is most likely a fish, with a possibility of a building in the image.
 2. For image 2, while the activations are significantly different but the softmax computation seems to be identical to image1
 
-The binomial approach provides more clarity into what could actually be present.
+The binary approach provides more clarity into what could actually be present.
 
 1. Image1 says that there could be a fish along with a building and possibly a cat.
 2. Image2 could possibly have a a fish in it but it but we can't be certain about anything.
