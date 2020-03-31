@@ -171,6 +171,13 @@ def update():
         a.grad.zero_()
 ```
 
+Here the gradient is the rate of change of loss with respect to the change in weights. 
+
+Here $a$ represents the weights in each layer.
+
+$$ 
+    a_t = a_{t-1} - (lr * \frac{dLoss}{da})
+$$
 <br>
 <br>
 
