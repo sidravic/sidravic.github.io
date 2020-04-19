@@ -1,7 +1,7 @@
 # Object Detection Basics
 >   The fundamentals of understanding object detection with YOLO and SSD architectures. 
 
-Object detection revolves around a few main architectures such as YOLO (we're referring to the older versions and not v3), SSD (Single Shot Detection) and FPN (Feature Pyramid Net). While this post focuses mainly on my understanding of YOLO and SSD [here is a piece by Nick Zeng](https://blog.zenggyu.com/en/post/2018-12-05/retinanet-explained-and-demystified/) which beautifully explains how it works. Nick's twitter is available [here](https://twitter.com/zenggyu)
+Object detection revolves around a few main architectures such as YOLO (we're referring to the older versions and not v3), SSD (Single Shot Detection) and FPN (Feature Pyramid Net). While this post focuses mainly on my understanding of YOLO and SSD [here is a piece by Nick Zeng](https://blog.zenggyu.com/en/post/2018-12-05/retinanet-explained-and-demystified/) which beautifully explains how FPN works. Nick's twitter is available [here](https://twitter.com/zenggyu)
 
 ## Starting with Single Object detection. 
 
