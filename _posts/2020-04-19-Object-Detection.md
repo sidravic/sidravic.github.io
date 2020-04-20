@@ -18,7 +18,7 @@ So our model needs to return two things
 1. The category of the classified image
 2. The bounding box of the image. 
 
-The classification part of the problem remains the same where we use a Categorical Cross Entropy as our loss function. But the bounding box part of our output is a regression problem. 
+The classification part of the problem remains the same where we use Categorical Cross Entropy as our loss function. But the bounding box part of our output is a regression problem. 
 
 So after Resnet determines the classes of the largest image we need to run regression on our final layers and return both the class and the coordinates the identify the image. 
 
@@ -37,7 +37,7 @@ head_reg4 = nn.Sequential(
 )
 ```
 
-This flattens the output received from the last resnet layer that would've been 512x7x7 (25088) so we end up with a flattened activation which we run through ReLU, Dropout, Linear a couple of times and output a tensor of shape `(4+data.c)`
+This flattens the output received from the last resnet layer that would've been 512x7x7 (25088) so we end up with a flattened activation which we run through `ReLU`, `Dropout`, `Linear` a couple of times and output a tensor of shape `(4+data.c)`
 
 Here 4 represents the 4 point coordinate which represents the top x,y and bottom x,y coordinates for our image. The `data.c` represents the number of categories in our dataset which in the case of Pascal dataset is 20 + 1 (The +1 represents background)
 
@@ -46,6 +46,7 @@ So with that out of the way our model needs to be able to evaluate the loss of t
 ### Loss function
 
 So our loss function can be split into 2 parts again. One for classification for which we'll use the Categorical Cross Entropy loss and L1Loss for the regression part of the problem.
+
 
 ```python
 :
@@ -84,16 +85,18 @@ data = data.normalize(imagenet_stats)
 
 However, we need to ensure we separate the coordinates and the classes for our prediction because our model returns just one vector for the form `(4+data.c)`
 
-Now, it's scaled and passed into L1Loss and CrossEntropy and we multiply with 20 to ensure the scales are equivalent. 
+Now, it's passed into L1Loss and CrossEntropy and we multiply with 20 to ensure the scales are equivalent. 
 
 ### Train and predict
 
 [Here's](https://github.com/sidravic/SSD_ObjectDetection_2/blob/master/train/Single_Object_Detection_using_ImageBBox.ipynb) the notebook with the training and predictions.
 
+![system schema](/images/object_detection/single_image_bb.png)
+
 
 ## MultiObject detection with a simple 4x4 grid of anchor boxes. 
 
-For multi object detection we use a linear layer which returns a vector of the shape `(4+data.c)`. This is the characteristic difference between YOLO and SSD. SSD uses a convolutional layer which is carefully designed to return an output layer that maps to the number of anchor boxes we choose. We'll get into the details of what we mean by anchor boxes but the essential difference is that YOLO uses a linear output layer returning a vector while SSD uses a convolutional layer at the end to return the information of the classification and bounding boxes. 
+For single object detection we use a linear layer which returns a vector of the shape `(4+data.c)`. This is the characteristic difference between YOLO and SSD. SSD uses a convolutional layer which is carefully designed to return an output layer that maps to the number of anchor boxes we choose. We'll get into the details of what we mean by anchor boxes but the essential difference is that YOLO uses a linear output layer returning a vector while SSD uses a convolutional layer at the end to return the information of the classification and bounding boxes. 
 
 
 Our goal with this exercise is to be able to detect every object within the 21 categories for an image
@@ -102,7 +105,9 @@ Our goal with this exercise is to be able to detect every object within the 21 c
 
 ### Anchor boxes
 
-Let's split our image into a $4x4$ grid which generates 16 sections for an image. Each section may contain a category of the object
+Let's split our image into a $4x4$ grid which generates 16 sections for an image. Each section may contain a category of the object. So our anchor boxes are bounding boxes for 224x224 image spread evenly. 
+
+Each image can be viewed as being made up 16 evenly spaced grids which may hold a category of image. The coordinates of the grid are the coordinates of the anchor box. Think of this as the template for our multi object classification problem. Our goal now is to classify the images that fall into each grid. 
 
 ![system schema](/images/object_detection/anchors.png)
 
@@ -197,17 +202,18 @@ The list is essentially the results we need. It consists of 2 parts
 self.oconv1 = nn.Conv2d(in_channels=nin, out_channels=((num_classes) * k), kernel_size=3, padding=1)
 ```
 
-1. The convolution which returns the clasification result where it takes the 256x4x4 input and returns one of the 21 classes. 
+1. The convolution which returns the clasification result, where it takes the 256x4x4 input and returns one of the 21 classes. (It actually returns a score for each of the 21 classes)
 
 ```python
  self.oconv2 = nn.Conv2d(nin, 4*k, 3, padding=1)
  ```
 
- 2. And another conv2d which accepts the same input and returns 4 coordinates. So our output again is returning a list of coordinates and classes. However, for each image we're now return 16 such coordinates and classes. One for each grid
+ 2. And another `conv2d` which accepts the same input and returns 4 coordinates. So our output again is returning a list of coordinates and classes. However, for each image we're now return 16 such coordinates and classes. One for each grid cell from our anchor box template.
 
- ### How did we arrive at 16 coordinates 
 
- Let's follow this with an example
+### How did we arrive at 16 coordinates 
+
+Let's follow this with an example
 
  ```
 [SSDhead] input shape torch.Size([16, 512, 7, 7])
@@ -229,7 +235,6 @@ self.oconv1 = nn.Conv2d(in_channels=nin, out_channels=((num_classes) * k), kerne
 ### The loss function
 
 The loss function is the tricky bit and took me over 2 weeks to fully understand how each component worked. For simplicity we'll avoid additional concepts like `Focal Loss` and `NMS` in this post. 
-
 
 Let's analyze the entire set of functions in the context of the inputs
 
@@ -390,15 +395,14 @@ The entry point of our loss is the `ssd_loss` method. Which receives a single ba
 1. 16 x 16 x 21 classes 
 2. 16 x 16 x 4 coordinates. 
 
-So our now we need to determine the loss but since we usually compute loss in batches (our batch size is 16) and our existing setup won't work. Our situation is slightly different given we have 16 tiny grids each containing an image and a set of coordinates. Our loss is the loss of each of these grids put together. 
+So now we need to determine the loss but since we usually compute loss in batches (our batch size is 16) our existing setup won't work. Our situation is slightly different given we have 16 tiny grids each containing an image and a set of coordinates. Our loss is the loss of each of these grids put together. 
 
-So, we 
+So, we need to allow our `ssd_loss` to be able to compute the loss for each anchor box grid in the template.
 
-
-1. For the target value coordinates (not our predictions), we determine the overlaps using the `jaccard index`. This returns information how much the actual images classes overlap with our 4x4 grid coordinates. 
+1. For the target value coordinates (not our predictions), we determine the overlaps using the `jaccard index`. The overlap is the interesection of the image coordinates in the original image (ground truth) with respect to the anchor box grids in our template. We're trying to determine which anchor boxes overlap with the ground truth images. 
 2. The `jaccard` method returns scores of the overlap and the box it overlaps with. 
-3. If a positive prediction has greater than 0.4 (40%) overlap then we get the corresponding label (class of the box). So now we know what the class is for each box. 
-4. We now get the predicted activations in terms of the anchors box coordinates using the `actn_to_bb` function. This returns the predicted activations as bounding box coordinates. 
+3. If a positive prediction has greater than 0.4 (40%) overlap then we get the corresponding label (class of the box). So now we know what the class is for each box. So now we can safely assume that a grid in the anchor box template would represent a specific category.
+4. We now get the predicted activations in terms of the anchors box coordinates using the `actn_to_bb` function. This returns the predicted activations as bounding box coordinates. What that means is for each prediction we have the activations that are now returned as bounding box coordinates mapping to the 4x4 anchor box template. We now compare the grids that mapped positively with a category by running them through our loss function.
 5. Now our bounding box loss function is just the L1Loss which is the distance between the coordinates. 
 
 ```
