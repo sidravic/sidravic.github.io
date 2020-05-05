@@ -282,15 +282,93 @@ The values for alpha and gamma are from the paper which offers the values that w
 3. Finding the best learning rates is something that still appears to be a ninja level skill to me but some priceless feedback from [@Joseadolfo](https://forums.fast.ai/u/joseadolfo) on the [fastai forums](https://forums.fast.ai/t/ssd-object-detection-overfits-very-quickly-and-ends-up-detecting-person-over-shadowing-all-other-classes/69574) helped me determine the best learning rates.
 4. I approached it by periodically testing the classification and regression results after every 10 epochs but I expect there to be more sophisticated ways to approach it. 
 
+### Non Max Suppression
+
+[This](https://towardsdatascience.com/non-maximum-suppression-nms-93ce178e177c) and [this video](https://www.youtube.com/watch?v=Uzg4eicmpO4) seemed to be one of the better explanations I've found for non max suppression. 
+
+The objective of having NMS is to ensure we only show the best bounding boxes and classifications for an candidate based on the confidence. We select a threshold for how much confidence we need to present our result. 
+
+By candidate we refer to the top 100 (this could be any value) of the best overlaps as returned by our predictions. 
+
+Here we select the threshold before we pass it to nms
+
+
+```python
+def process_nmf(idx, debug=True):
+    '''
+    Connects to the nmf algorith to filter out dupplicate bounding boxes
+    ''' 
+    # Minimun threshold for eliminating background noise
+    min_thresh = 0.11   #0.25
+    
+    # Maximun threshold for eliminating duplicate boxes
+    max_thresh = 0.32 
+    
+     # Extract predicted classes
+    clas_pr, clas_ids = b_clas[idx].max(dim=1)
+
+    
+    # Mask Index of classes whose contents are over the noise level: 0 if the index contains no boxes, 1 if it does
+    clas_pr = clas_pr.sigmoid()    
+    
+    # Calculate confidence score for Class Activations
+    conf_scores = b_clas[idx].sigmoid().t().data      
+    
+    
+    
+    # Converts activation vectors to boxes. Shape: 189 x 4
+    p_final_bbox = actn_to_bb(b_bb[idx].cpu(), anchors, grid_sizes=grid_sizes) 
+    
+    # lists for accumulating selected boxes and classes
+    tot_bx, tot_cls = [], []
+    
+    scrd_cls_lst = data.classes.copy()
+  
+    # Loop across all classes
+    for cl in range(0, len(conf_scores)):
+        
+        # Filter out Backgrounds and empty box arrays        
+        c_mask = conf_scores[cl] > min_thresh         
+        if c_mask.sum() == 0 or cl == 0: continue
+        
+        
+        # scores for the selected class 
+        scores = conf_scores[cl][c_mask] # Tensor 
+           
+        # These are active boxes. Ready to be processed by nmf
+        boxes = p_final_bbox.cpu().index_select(dim=0,index=c_mask.nonzero().squeeze())
+        
+        # Run NMF
+        ids, count = nms(boxes.data, scores, overlap=0.5, top_k=20)
+        ids = ids[:count]
+        
+    
+        
+        # Filter all boxes & classes over the threshold and accumulate them in lists
+        for i, (sc, bx) in enumerate(zip(scores, boxes.data[ids] )): 
+                 
+            tot_bx.append(bx)
+            tot_cls.append(cl)
+            # Create a scored label
+            f = f'{i}: '           
+            l = f'{data.classes[cl]} '
+            s = '{0:.2f}'.format(sc) 
+            sl = f+l+s
+            # print('scored label: {} '.format(sl))
+            scrd_cls_lst[cl] = sl
+
+                
+    if not tot_cls:
+        print('Inferred Class list is empty. Image may be too faint.')
+        return None, None, None  
+    
+    return torch.cat(tot_bx).view(-1, 4), torch.tensor((np.array(tot_cls))), scrd_cls_lst
+```
+
+I work with a low threshold of `0.11` which may not be what you need but it will try to identify as much as possible in the image. We also pass the amount of overlap (IoU) we expect which in our case is `0.5`. I've used [@Joseadolfo's](https://forums.fast.ai/u/joseadolfo) version of nmf here and updated the thresholds to suit my requirements.
+
 ### The code
 
 The final example lives [here](https://github.com/sidravic/SSD_ObjectDetection_2/blob/master/train/MultiLabelObjectDetection_LargerAnchors-Updated-Hyperparams.ipynb) and I've retained all the different attempts and failures in this [repository](https://github.com/sidravic/SSD_ObjectDetection_2/blob/master/train)
-
-
-
-
-
-
-
 
 
