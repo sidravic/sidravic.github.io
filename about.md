@@ -15,10 +15,10 @@ Most recently, I led the engineering teams at Simpl and TrustingSocial.
 I care about data, finance and people. Building cohesive, deterministic and interpretable systems that offer insights for your business or a complex consumer facing platform is where I thrive. 
 <br>
 
-Building great platforms requires building great teams and is one of the most nuanced skills in our industry. I run a technology firm called Core27 that helps businesses achieve their engineering goals consistently. 
+Building great platforms requires building great teams and is one of the most nuanced skills in our industry. I run a technology firm called Core27 that helps businesses build cohesive teams and better platforms. 
 
 <br>
-Write to [me](mailto://sid@core27.co) if you think you could use our help. 
+Write to [me](mailto://sid@core27.co) if you think I can help. 
 
 
 
