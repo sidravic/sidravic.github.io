@@ -1,6 +1,25 @@
 # About
 
-Siddharth Ravichandran is a systems architect who has worked on a wide variety of business and social applications with experience in leading large technology teams and building scalable Ruby, Node, Python and Go applications. 
+## Hi, 
 
-He led engineering teams at Simpl and TrustingSocial most recently and presently spends his time on building Computer vision applications using Pytorch. 
+
+I am Siddharth and I usually go by Sid. 
+<br>
+
+I'm a systems architect and I build platforms for businesses. I've been working in tech for nearly 15 years and I've spent the last 8 on building systems for Fintech companies. 
+<br>
+
+Most recently, I led the engineering teams at Simpl and TrustingSocial. 
+<br>
+
+I care about data, finance and people. Building cohesive, deterministic and interpretable systems that offer insights for your business or a complex consumer facing platform is where I thrive. 
+<br>
+
+Building great platforms requires building great teams and is one of the most nuanced skills in our industry. I run a technology firm called Core27 that helps businesses achieve their engineering goals consistently. 
+
+<br>
+Write to [me](mailto://sid@core27.co) if you think you could use our help. 
+
+
+
 
